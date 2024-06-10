@@ -5,7 +5,7 @@ import theme from './assets/theme';
 import { ThemeProvider } from '@emotion/react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import UserProfile from './pages/UserProfile.tsx';
-import App from "./App.tsx";
+import App from "./components/App.tsx";
 
 const router = createBrowserRouter([
   {
