@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import {Box, Card, CardContent, CardMedia, Container, Grid} from "@mui/material"
+import {useEffect} from "react";
+import {Alert, Box, Card, CardContent, CardMedia, Container, Grid} from "@mui/material"
 import Typography from "@mui/material/Typography";
 import CloseableAlert from "../components/CloseableAlert";
 import {PurchasesList} from "../components/PurchasesList";
@@ -29,8 +29,11 @@ const UserProfile = () => {
     return(
         <Container style={{ height: "126vh", display: "flex"}}>
                 <Container sx={{mt: 10, backgroundColor: '#ffffff', width: '100%'}}>
-                    { state.isLoading ?
-                        (<Progress/>): state.user && (
+                    { state.isLoading ? (<Progress/>):
+                        state.error ? (<Alert severity="error">Error al obtener infomación de Usuario</Alert>
+                            ):
+                        state.user &&
+                        (
                             <>
                                 <Card>
                                     <CardContent sx={{display: 'flex'}}>

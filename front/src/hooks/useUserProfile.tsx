@@ -3,11 +3,14 @@ import UserService from "../services/UsersService.ts";
 import User from "../models/User.ts";
 import Restrictions from "../models/Restrictions.ts";
 
+const USER_ID = 1;
+
 export const useUserProfile = () => {
     const initialState = {
         user: null,
         restrictions: [],
         isLoading: true,
+        error: null,
     };
 
     const reducer = (state: State, action: Action) => {
@@ -18,17 +21,22 @@ export const useUserProfile = () => {
                     user: action.payload.user,
                     restrictions: action.payload.restrictions,
                     isLoading: false,
+                    error: null,
                 };
             case 'FETCH_ERROR':
                 console.error('Error fetching data:', action.payload.error);
-                return { ...state, isLoading: false };
+                return {
+                    ...state,
+                    isLoading: false,
+                    error: action.payload.error,
+                };
             case 'REMOVE_ALERT':
                 return {
                     ...state,
                     restrictions: state.restrictions.filter((_, i) => i !== action.payload.index),
                 };
             default:
-                throw new Error();
+                return state;
         }
     };
 
@@ -38,7 +46,7 @@ export const useUserProfile = () => {
         try {
             const [user, restrictions] = await Promise.all([
                 new UserService().getProfile(),
-                new UserService().getRestrictions(1)
+                new UserService().getRestrictions(USER_ID)
             ]);
             dispatch({ type: 'FETCH_SUCCESS', payload: { user: user.data, restrictions: restrictions.data } });
         } catch (error: unknown) {
@@ -57,6 +65,7 @@ interface State {
     user: User | null;
     restrictions: Restrictions[];
     isLoading: boolean;
+    error: unknown;
 }
 
 type Action =
