@@ -14,59 +14,29 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import OrderProductDetail from "./OrderProductDetail.tsx";
-import { TransitionProps } from '@mui/material/transitions';
-import {useEffect, useState} from "react";
-import OrdersServices from "../services/OrdersServices.ts";
-import {ShipmentDetails} from "../models/ShipmentDetails.ts";
-import {PaymentDetails} from "../models/PaymentDetails.ts";
 import ProgressLinear from "./ProgressLinear.tsx";
 import {LocalShipping, Payment, Storefront} from "@mui/icons-material";
+import {TransitionProps} from "@mui/material/transitions/transition";
+import {usePurchaseDetails} from "../hooks/usePurchaseDetails.ts";
 
-const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-        children: React.ReactElement;
-    },
-    ref: React.Ref<unknown>,
-) {
+
+const Transition = React.forwardRef(function Transition(props:TransitionProps, ref) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return <Slide direction="up" ref={ref} {...props}/>;
 });
 
-export const PurchaseDetail = (props: { onClose: () => void, open: boolean, purchase: Purchase }) => {
-    const [shipmentDetails, setShipmentDetails] = useState<ShipmentDetails>()
-    const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>()
-    const [isLoading, setIsLoading] = useState(false)
-
-
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            Promise.all([
-                new OrdersServices().getShipment(props.purchase.shipment_id!),
-                new OrdersServices().getPayment(props.purchase.transaction_id!)
-            ]).then(([shipmentDetails, paymentDetails]) => {
-                setShipmentDetails(shipmentDetails);
-                setPaymentDetails(paymentDetails);
-            }).finally(() => { setIsLoading(false); });
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    useEffect(() => {
-        if (props.open) {
-            fetchData();
-        }
-    }, [props.open]);
-
+export const PurchaseDetail = ({ onClose, open, purchase }: PurchaseDetail) => {
+    const {shipmentDetails, paymentDetails, isLoading, error} = usePurchaseDetails(purchase, open)
     return <Dialog
-        onClose={props.onClose}
-        open={props.open}
+        onClose={onClose}
+        open={open}
         fullWidth={true}
         maxWidth={"lg"}
         TransitionComponent={Transition}>
         <DialogTitle> Detalle de la compra </DialogTitle>
         <IconButton
-            onClick={props.onClose}
+            onClick={onClose}
             sx={{position: "absolute", right: 8, top: 8,}}>
             <CloseIcon/>
         </IconButton>
@@ -74,20 +44,25 @@ export const PurchaseDetail = (props: { onClose: () => void, open: boolean, purc
             <Card sx={{backgroundColor: "white", mt: 2, display: "flex", flexDirection: "column"}}>
                 <CardContent>
                     <Typography component="div" variant="subtitle1" fontWeight={"bold"}>
-                        {props.purchase.getDate()}
+                        {purchase.getDate()}
                     </Typography>
                 </CardContent>
                 <CardContent sx={{display: "flex"}}>
-                    <OrderProductDetail purchase={props.purchase}/>
+                    <OrderProductDetail purchase={purchase}/>
                     <CardContent sx={{ width: "50%", textAlign: "center"}}>
                         <Storefront/>
                         <Typography component="div" variant="caption">Vendedor</Typography>
-                        <Typography component="div" variant="subtitle2">{props.purchase.seller?.nickname}</Typography>
+                        <Typography component="div" variant="subtitle2">{purchase.seller?.nickname}</Typography>
                     </CardContent>
                 </CardContent>
             </Card>
             <Paper elevation={6} sx={{mt: 4, display: "flex", p: 6}}>
-                { isLoading ? <ProgressLinear /> :
+                { isLoading ? (<ProgressLinear />):
+                    error ? (
+                            <Typography variant="body2" color="error">
+                                Error fetching purchase details
+                            </Typography>
+                        ) :
                     <>
                         <Box sx={{ width: '50%', textAlign: "center"}}>
                             <LocalShipping/>
@@ -104,9 +79,15 @@ export const PurchaseDetail = (props: { onClose: () => void, open: boolean, purc
             </Paper>
         </DialogContent>
         <DialogActions>
-            <Button onClick={props.onClose} color="info">
+            <Button onClick={onClose} color="info">
                 Close
             </Button>
         </DialogActions>
     </Dialog>;
+}
+
+interface PurchaseDetail {
+    onClose: () => void;
+    open: boolean;
+    purchase: Purchase;
 }
