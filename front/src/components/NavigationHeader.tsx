@@ -1,7 +1,6 @@
 import AppBar from "@mui/material/AppBar";
 import {Box, Toolbar} from "@mui/material";
 import {Link} from "react-router-dom";
-import Typography from "@mui/material/Typography";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -13,7 +12,9 @@ export const NavigationHeader = (props: {zIndex: (theme) => number }) => (
             <Toolbar>
               <Box sx={{flexGrow: 1}}>
                 <Link to={`/`}>
-                  <Typography variant="h6" component="h6" sx={{mb: 2}}> Home </Typography>
+                    <img
+                        style={{ width: "160px", height: "50px", padding: "4px"}}
+                        src={"https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.55/mercadolibre/logo_large_25years@2x.png"}/>
                 </Link>
               </Box>
             </Toolbar>

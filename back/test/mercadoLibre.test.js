@@ -30,7 +30,7 @@ describe('GET /profile', () => {
         expect(response.body).toEqual(userInfo);
     });
 
-    it('debería manejar errores', async () => {
+    it('should handle errors', async () => {
         MercadolibreService.getUser.mockRejectedValue(new Error('Error al obtener el usuario'));
 
         const response = await request(app).get('/profile');
