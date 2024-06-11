@@ -1,11 +1,13 @@
 > # Instrucciones para Levantar el Proyecto
 
 El proyecto tiene dos carpetas
-- **back**
-  - ejecutar `npm install`
-  - ejecutar `npm run dev`
-  - la app se va a ejecutar en la directión http://localhost:3000/
-- **front**
+- **/back**
+    - Ingresar al directorio /back
+    - ejecutar `npm install`
+    - ejecutar `npm run dev`
+    - la app se va a ejecutar en la directión http://localhost:3000/
+- **/front**
+  - Ingresar al directorio /front
   - ejecutar `npm install`
   - ejecutar `npm run dev`
   - la app se va a ejecutar en la dirección http://localhost:5173/
@@ -97,17 +99,16 @@ Ten en cuenta que necesitamos instrucciones para levantar el proyecto, las misma
 - Toda la información que necesitas para las pantallas del frontend la puedes encontrar usando el servicio que proveemos. Si no es así, envíanos un mensaje cuanto antes!
 
 
-
-
 > # Instrucciones para Levantar el Proyecto
 
 El proyecto tiene dos carpetas
-- **back**
+- **/back**
+  - Ingresar al directorio /back
   - ejecutar `npm install`
   - ejecutar `npm run dev`
   - la app se va a ejecutar en la directión http://localhost:3000/
-- **front**
+- **/front**
+  - Ingresar al directorio /front
   - ejecutar `npm install`
   - ejecutar `npm run dev`
   - la app se va a ejecutar en la dirección http://localhost:5173/
-
