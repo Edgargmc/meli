@@ -22,19 +22,20 @@ import {PaymentDetails} from "../models/PaymentDetails.ts";
 import ProgressLinear from "./ProgressLinear.tsx";
 import {LocalShipping, Payment, Storefront} from "@mui/icons-material";
 
+const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+        children: React.ReactElement;
+    },
+    ref: React.Ref<unknown>,
+) {
+    return <Slide direction="up" ref={ref} {...props}/>;
+});
+
 export const PurchaseDetail = (props: { onClose: () => void, open: boolean, purchase: Purchase }) => {
     const [shipmentDetails, setShipmentDetails] = useState<ShipmentDetails>()
     const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>()
-    const [isloading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const Transition = React.forwardRef(function Transition(
-        props: TransitionProps & {
-            children: React.ReactElement;
-        },
-        ref: React.Ref<unknown>,
-    ) {
-        return <Slide direction="up" ref={ref} {...props}/>;
-    });
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -86,7 +87,7 @@ export const PurchaseDetail = (props: { onClose: () => void, open: boolean, purc
                 </CardContent>
             </Card>
             <Paper elevation={6} sx={{mt: 4, display: "flex", p: 6}}>
-                { isloading ? <ProgressLinear /> :
+                { isLoading ? <ProgressLinear /> :
                     <>
                         <Box sx={{ width: '50%', textAlign: "center"}}>
                             <LocalShipping/>
