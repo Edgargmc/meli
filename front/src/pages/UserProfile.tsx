@@ -28,7 +28,7 @@ const UserProfile = () => {
 
     return(
         <Container style={{ height: "126vh", display: "flex"}}>
-                <Container sx={{mt: 10, backgroundColor: '#ededed', width: '100%'}}>
+                <Container sx={{mt: 10, backgroundColor: '#ffffff', width: '100%'}}>
                     { state.isLoading ?
                         (<Progress/>): state.user && (
                             <>

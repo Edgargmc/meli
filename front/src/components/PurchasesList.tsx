@@ -62,7 +62,7 @@ export const PurchasesList = ({userId}: PurchasesList) => {
 
     return (
         <>
-            <Box sx={{ m: 6, backgroundColor: '#ededed', display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ m: 6, backgroundColor: '#ffffff', display: 'flex', justifyContent: 'center' }}>
                 <Pagination
                     count={count}
                     size="large"
