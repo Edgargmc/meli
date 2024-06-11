@@ -21,7 +21,7 @@ import {usePurchaseDetails} from "../hooks/usePurchaseDetails.ts";
 
 
 const Transition = React.forwardRef(function Transition(props:TransitionProps, ref) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // eslint-disable-next-line
     // @ts-ignore
     return <Slide direction="up" ref={ref} {...props}/>;
 });

@@ -24,7 +24,7 @@ export const usePurchaseDetails = (purchase: Purchase, open: boolean) => {
                 setPaymentDetails(payment);
             } catch (error) {
                 console.error(error);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // eslint-disable-next-line
                 // @ts-ignore
                 setError(error);
             } finally {

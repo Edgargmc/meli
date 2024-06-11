@@ -1,84 +1,77 @@
 import UserService from "../services/UsersService";
-import {useEffect, useState} from "react";
+import {useEffect, useReducer, useState} from "react";
 import Purchase from "../models/Purchase.ts";
-import {PurchasesItem} from "./PurchasesItem.tsx";
-import {PurchaseDetail} from "./PurchaseDetail.tsx";
-import {Box, Pagination, Paper} from "@mui/material";
+import { PurchasesItem } from "./PurchasesItem.tsx";
+import { PurchaseDetail } from "./PurchaseDetail.tsx";
+import {Alert, Box, Pagination, Paper} from "@mui/material";
 import Progress from "./Progress.tsx";
+import reducer from "../hooks/usePurchaseReducer.ts"; // Import the reducer
 
 const ITEM_PER_PAGE = 4;
 
-export const PurchasesList = ({userId}: PurchasesList) => {
-    const [purchases, setPurchases] = useState<Purchase[]>([]);
-    const [openDetailsPurchase, setOpenDetailsPurchase] = useState(false);
-    const [purchase, setPurchase] = useState<Purchase>();
-    const [page, setPage] = useState(1);
-    const [count, setCount] = useState(1);
-    const [isLoading, setIsLoading] = useState(true);
+const initialState = {
+    purchases: [],
+    isLoading: true,
+    openDetailsPurchase: false,
+    purchase: null,
+    page: 1,
+    count: 1,
+};
 
-    const fetchData = async (page: number) => {
-        setIsLoading(true);
-        const getNumber = (total:number) => {
-            return Math.ceil(total / ITEM_PER_PAGE);
-        }
-        try{
-            const response = await new UserService().getPurchases(userId, page, ITEM_PER_PAGE)
-            setPurchases(response.purchases);
-            setCount(getNumber(response.paginationData.total));
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
-    const handleDetailPurchase = (purchaseId?: string) => {
-        const currentPurchases = purchases.find(p => { return p.purchase_id == purchaseId})
-        setPurchase(currentPurchases!);
-        setOpenDetailsPurchase(true);
-    }
-
-    const handleClose = () => {
-        setOpenDetailsPurchase(false);
-    };
+export const PurchasesList = ({ userId }: PurchasesList) => {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const [error, setError] = useState(null); // State for error message
 
     useEffect(() => {
-        fetchData(page);
-    }, [userId]);
+        dispatch({ type: "FETCH_PURCHASES" });
+        const fetchData = async (page: number) => {
+            try {
+                const response = await new UserService().getPurchases(userId, page, ITEM_PER_PAGE);
+                dispatch({
+                    type: "FETCH_PURCHASES_SUCCESS",
+                    payload: response,
+                });
+            } catch (error) {
+                // eslint-disable-next-line
+                // @ts-ignore
+                setError(error.message);
+                dispatch({ type: "FETCH_PURCHASES_ERROR" });
+            }
+        };
+        fetchData(state.page);
+    }, [userId, state.page]);
 
-    const renderDialog = () => {
-        return (purchase &&
-            <PurchaseDetail
-                onClose={handleClose}
-                open={openDetailsPurchase}
-                purchase={purchase}/>
-        );
-    }
+    const handleDetailPurchase = (purchaseId?: string) => {
+        dispatch({ type: "OPEN_PURCHASE_DETAIL", payload: { purchaseId } });
+    };
+
+    const handleClose = () => {
+        dispatch({ type: "CLOSE_PURCHASE_DETAIL" });
+    };
 
     const handleChangePagination = (_e: unknown, page: number) => {
-        setPage(page);
-        fetchData(page)
-    }
+        dispatch({ type: "CHANGE_PAGE", payload: { page } });
+    };
+
+    const renderDialog = () => {
+        return state.purchase && (
+            <PurchaseDetail onClose={handleClose} open={state.openDetailsPurchase} purchase={state.purchase} />
+        );
+    };
 
     return (
         <>
-            <Box sx={{ m: 6, backgroundColor: '#ffffff', display: 'flex', justifyContent: 'center' }}>
-                <Pagination
-                    count={count}
-                    size="large"
-                    page={page}
-                    variant="outlined"
-                    shape="rounded"
-                    onChange={handleChangePagination}
-                />
-            </Box>
-            {isLoading ? (
-                <Progress />
-            ) : (
-                <>
-                    {purchases && purchases.length > 0 ? (
+            { state.purchases &&
+                <Box sx={{ m: 6, backgroundColor: '#ffffff', display: 'flex', justifyContent: 'center' }}>
+                    <Pagination count={state.count} size="large" page={state.page} variant="outlined" shape="rounded" onChange={handleChangePagination} />
+                </Box>
+            }
+            {state.isLoading ? ( <Progress />) :
+                error ? (<Alert severity="error">{error}</Alert>) :
+                (<>
+                    {state.purchases && state.purchases.length > 0 ? (
                         <>
-                            {purchases.map((purchase: Purchase, index) => (
+                            {state.purchases.map((purchase: Purchase, index:number) => (
                                 <Paper elevation={3} key={index}>
                                     <PurchasesItem
                                         key={index}
@@ -89,14 +82,14 @@ export const PurchasesList = ({userId}: PurchasesList) => {
                             ))}
                         </>
                     ) : (
-                        <div>No purchases found.</div>
+                        <Alert severity="info">No purchases found.</Alert>
                     )}
                     {renderDialog()}
                 </>
             )}
         </>
     );
-}
+};
 
 interface PurchasesList {
     userId: number;
