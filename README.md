@@ -1,3 +1,18 @@
+> # Instrucciones para Levantar el Proyecto
+
+El proyecto tiene dos carpetas
+- **back**
+  - ejecutar `npm install`
+  - ejecutar `npm run dev`
+  - la app se va a ejecutar en la directión http://localhost:3000/
+- **front**
+  - ejecutar `npm install`
+  - ejecutar `npm run dev`
+  - la app se va a ejecutar en la dirección http://localhost:5173/
+
+
+
+
 # Challenge técnico Mercadolibre
 
 Este challenge consiste en **dos partes**, una de frontend y otra de backend. Dado que solemos trabajar en ambos mundos, te pedimos que lo tengas en cuenta a la hora de diseñar y desarrollar las distintas capas del proyecto.
@@ -80,4 +95,19 @@ Ten en cuenta que necesitamos instrucciones para levantar el proyecto, las misma
 ### Tips para Backend
 
 - Toda la información que necesitas para las pantallas del frontend la puedes encontrar usando el servicio que proveemos. Si no es así, envíanos un mensaje cuanto antes!
+
+
+
+
+> # Instrucciones para Levantar el Proyecto
+
+El proyecto tiene dos carpetas
+- **back**
+  - ejecutar `npm install`
+  - ejecutar `npm run dev`
+  - la app se va a ejecutar en la directión http://localhost:3000/
+- **front**
+  - ejecutar `npm install`
+  - ejecutar `npm run dev`
+  - la app se va a ejecutar en la dirección http://localhost:5173/
 
