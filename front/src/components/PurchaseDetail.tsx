@@ -1,3 +1,4 @@
+import React from 'react';
 import Purchase from "../models/Purchase.ts";
 import {
     Box,
@@ -14,26 +15,26 @@ import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import OrderProductDetail from "./OrderProductDetail.tsx";
 import { TransitionProps } from '@mui/material/transitions';
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import OrdersServices from "../services/OrdersServices.ts";
 import {ShipmentDetails} from "../models/ShipmentDetails.ts";
 import {PaymentDetails} from "../models/PaymentDetails.ts";
 import ProgressLinear from "./ProgressLinear.tsx";
 import {LocalShipping, Payment, Storefront} from "@mui/icons-material";
 
-const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-        children: React.ReactElement;
-    },
-    ref: React.Ref<unknown>,
-) {
-    return <Slide direction="up" ref={ref} {...props}/>;
-});
-
 export const PurchaseDetail = (props: { onClose: () => void, open: boolean, purchase: Purchase }) => {
     const [shipmentDetails, setShipmentDetails] = useState<ShipmentDetails>()
     const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>()
     const [isloading, setIsLoading] = useState(false)
+
+    const Transition = React.forwardRef(function Transition(
+        props: TransitionProps & {
+            children: React.ReactElement;
+        },
+        ref: React.Ref<unknown>,
+    ) {
+        return <Slide direction="up" ref={ref} {...props}/>;
+    });
 
     const fetchData = async () => {
         setIsLoading(true);
