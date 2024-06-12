@@ -1,7 +1,7 @@
 import React from 'react';
 import Purchase from "../models/Purchase.ts";
 import {
-    Box,
+    Alert,
     Button,
     Card,
     CardContent,
@@ -9,15 +9,19 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    IconButton, Paper, Slide
+    IconButton,
+    Paper,
+    Slide
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import OrderProductDetail from "./OrderProductDetail.tsx";
 import ProgressLinear from "./ProgressLinear.tsx";
-import {LocalShipping, Payment, Storefront} from "@mui/icons-material";
+import {Storefront} from "@mui/icons-material";
 import {TransitionProps} from "@mui/material/transitions/transition";
 import {usePurchaseDetails} from "../hooks/usePurchaseDetails.ts";
+import {ShipmentDetail} from "./ShipmentDetail.tsx";
+import {PaymentDetail} from "./PaymentDetail.tsx";
 
 
 const Transition = React.forwardRef(function Transition(props:TransitionProps, ref) {
@@ -28,6 +32,7 @@ const Transition = React.forwardRef(function Transition(props:TransitionProps, r
 
 export const PurchaseDetail = ({ onClose, open, purchase }: PurchaseDetail) => {
     const {shipmentDetails, paymentDetails, isLoading, error} = usePurchaseDetails(purchase, open)
+
     return <Dialog
         onClose={onClose}
         open={open}
@@ -59,21 +64,11 @@ export const PurchaseDetail = ({ onClose, open, purchase }: PurchaseDetail) => {
             <Paper elevation={6} sx={{mt: 4, display: "flex", p: 6}}>
                 { isLoading ? (<ProgressLinear />):
                     error ? (
-                            <Typography variant="body2" color="error">
-                                Error fetching purchase details
-                            </Typography>
+                            <Alert severity="error">Error fetching purchase details</Alert>
                         ) :
                     <>
-                        <Box sx={{ width: '50%', textAlign: "center"}}>
-                            <LocalShipping/>
-                            <Typography component="div" variant="caption">Detalle del envío</Typography>
-                            <Typography>{shipmentDetails?.status}</Typography>
-                        </Box>
-                        <Box sx={{ width: '50%', textAlign: "center"}}>
-                            <Payment/>
-                            <Typography component="div" variant="caption">Detalle del Pago</Typography>
-                            <Typography>{paymentDetails?.status}</Typography>
-                        </Box>
+                        <ShipmentDetail status={shipmentDetails?.status}/>
+                        <PaymentDetail status={paymentDetails?.status}/>
                     </>
                 }
             </Paper>
