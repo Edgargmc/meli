@@ -2,7 +2,7 @@ import AppBar from "@mui/material/AppBar";
 import {Box, Toolbar} from "@mui/material";
 import {Link} from "react-router-dom";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line
 // @ts-ignore
 export const NavigationHeader = (props: {zIndex: (theme) => number }) => (
         <AppBar
