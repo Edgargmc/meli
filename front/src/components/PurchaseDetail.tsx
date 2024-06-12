@@ -20,8 +20,7 @@ import ProgressLinear from "./ProgressLinear.tsx";
 import {Storefront} from "@mui/icons-material";
 import {TransitionProps} from "@mui/material/transitions/transition";
 import {usePurchaseDetails} from "../hooks/usePurchaseDetails.ts";
-import {ShipmentDetail} from "./ShipmentDetail.tsx";
-import {PaymentDetail} from "./PaymentDetail.tsx";
+import {PaymentDetail, ShipmentDetail} from "./PaymentDetail.tsx";
 
 
 const Transition = React.forwardRef(function Transition(props:TransitionProps, ref) {
