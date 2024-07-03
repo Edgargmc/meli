@@ -16,10 +16,9 @@ export const usePurchaseDetails = (purchase: Purchase, open: boolean) => {
             setError(null);
             const ordersService = new OrdersServices();
             try {
-                const [shipment, payment] = await Promise.all([
-                    ordersService.getShipment(purchase.shipment_id!),
-                    ordersService.getPayment(purchase.transaction_id!)
-                ]);
+                const shipment = await ordersService.getShipment(purchase.shipment_id!);
+                const payment = await ordersService.getPayment(purchase.transaction_id!);
+
                 setShipmentDetails(shipment);
                 setPaymentDetails(payment);
             } catch (error) {
